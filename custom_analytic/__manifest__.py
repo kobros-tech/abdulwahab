@@ -34,9 +34,12 @@
     'depends': [
         'account',
         'stock', 
+        'mrp',
+        'mrp_account',
     ],
     'data': [
         "views/stock_location_views.xml",
         "views/stock_move_line_views.xml",
+        "views/mrp_production_views.xml",
     ],
 }

@@ -11,19 +11,8 @@ class StockScrap(models.Model):
     def _prepare_move_values(self):
         vals = super()._prepare_move_values()
 
-        if self.location_id:
-            vals = {
-                'name': self.name,
-                'origin': self.origin or self.picking_id.name or self.name,
-                'company_id': self.company_id.id,
-                'product_id': self.product_id.id,
-                'product_uom': self.product_uom_id.id,
-                'state': 'draft',
-                'product_uom_qty': self.scrap_qty,
-                'location_id': self.location_id.id,
-                'scrapped': True,
-                'scrap_id': self.id,
-                'location_dest_id': self.scrap_location_id.id,
+        if self.location_id.analytic_account_id:
+            dict_move_line_ids = {
                 'move_line_ids': [(0, 0, {
                     'product_id': self.product_id.id,
                     'product_uom_id': self.product_uom_id.id,
@@ -36,10 +25,8 @@ class StockScrap(models.Model):
                     # custom
                     'analytic_distribution': self.location_id.analytic_distribution
                 })],
-                # 'restrict_partner_id': self.owner_id.id,
-                'picked': True,
-                'picking_id': self.picking_id.id
             }
+            vals['move_line_ids'] = dict_move_line_ids['move_line_ids']
 
         return vals
 
